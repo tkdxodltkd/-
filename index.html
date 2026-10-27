@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>캐릭터 프로필 &amp; 설정 에디터</title>
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            neon: '#ccff00',       // Neon Lime Accent
+            cyberDark: '#111111'   // Deep Cyber Black
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Strict font inherit & Absolute NO Shadows Rule */
+    body, button, input, textarea, select, div, span, h1, h2, h3, h4, p, label {
+      font-family: inherit !important;
+    }
+
+    * {
+      box-shadow: none !important;
+    }
+
+    /* Sharp Solid 1px Black Border */
+    .border-cyber {
+      border: 1px solid #111111;
+    }
+
+    /* Dynamic Dotted Leader Line for Key-Value Traits */
+    .dot-leader {
+      border-bottom: 2px dotted #cccccc;
+      flex-grow: 1;
+      margin: 0 8px 4px 8px;
+    }
+
+    /* Contenteditable Field Visual Feedback */
+    [contenteditable="true"] {
+      outline: none;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+      border-radius: 0px;
+      padding: 1px 4px;
+    }
+
+    [contenteditable="true"]:hover {
+      background-color: rgba(204, 255, 0, 0.3);
+      cursor: text;
+    }
+
+    [contenteditable="true"]:focus {
+      background-color: rgba(204, 255, 0, 0.55);
+      border-bottom: 1px dashed #000000;
+    }
+
+    /* Custom Minimal Scrollbar */
+    .custom-scroll::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #ffffff;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #111111;
+    }
+  </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.relative{position:relative}.inset-0{inset:0px}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.my-4{margin-top:1rem;margin-bottom:1rem}.my-2{margin-top:0.5rem;margin-bottom:0.5rem}.mb-1{margin-bottom:0.25rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.mb-2{margin-bottom:0.5rem}.ml-1{margin-left:0.25rem}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-2\.5{height:0.625rem}.min-h-screen{min-height:100vh}.w-2\.5{width:0.625rem}.w-full{width:100%}.max-w-5xl{max-width:64rem}.max-w-md{max-width:28rem}.shrink-0{flex-shrink:0}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-4{gap:1rem}.gap-x-4{column-gap:1rem}.gap-x-8{column-gap:2rem}.gap-y-1{row-gap:0.25rem}.gap-y-2{row-gap:0.5rem}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.space-y-8 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2rem * var(--tw-space-y-reverse))}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-t{border-top-width:1px}.border-black{--tw-border-opacity:1;border-color:rgb(0 0 0 / var(--tw-border-opacity, 1))}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-black\/60{background-color:rgb(0 0 0 / 0.6)}.bg-neon{--tw-bg-opacity:1;background-color:rgb(204 255 0 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.pb-1{padding-bottom:0.25rem}.pb-2{padding-bottom:0.5rem}.pb-3{padding-bottom:0.75rem}.pt-1{padding-top:0.25rem}.pt-2{padding-top:0.5rem}.pb-1\.5{padding-bottom:0.375rem}.text-right{text-align:right}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.text-\[10px\]{font-size:10px}.font-black{font-weight:900}.font-bold{font-weight:700}.uppercase{text-transform:uppercase}.italic{font-style:italic}.leading-relaxed{line-height:1.625}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-black{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.text-neon{--tw-text-opacity:1;color:rgb(204 255 0 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.opacity-0{opacity:0}.outline-none{outline:2px solid transparent;outline-offset:2px}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-black:hover{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.hover\:bg-neon:hover{--tw-bg-opacity:1;background-color:rgb(204 255 0 / var(--tw-bg-opacity, 1))}.hover\:bg-neutral-100:hover{--tw-bg-opacity:1;background-color:rgb(245 245 245 / var(--tw-bg-opacity, 1))}.hover\:bg-neutral-200:hover{--tw-bg-opacity:1;background-color:rgb(229 229 229 / var(--tw-bg-opacity, 1))}.hover\:bg-white:hover{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.hover\:text-black:hover{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}.focus\:bg-neon\/20:focus{background-color:rgb(204 255 0 / 0.2)}.group\/trait:hover .group-hover\/trait\:opacity-100{opacity:1}@media (min-width: 640px){.sm\:flex-row{flex-direction:row}.sm\:items-baseline{align-items:baseline}.sm\:p-6{padding:1.5rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}@media (min-width: 1024px){.lg\:w-auto{width:auto}.lg\:flex-row{flex-direction:row}.lg\:items-center{align-items:center}}</style><style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.relative{position:relative}.inset-0{inset:0px}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.my-2{margin-top:0.5rem;margin-bottom:0.5rem}.my-4{margin-top:1rem;margin-bottom:1rem}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.ml-1{margin-left:0.25rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-2\.5{height:0.625rem}.min-h-screen{min-height:100vh}.w-2\.5{width:0.625rem}.w-full{width:100%}.max-w-5xl{max-width:64rem}.max-w-md{max-width:28rem}.shrink-0{flex-shrink:0}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-4{gap:1rem}.gap-x-4{column-gap:1rem}.gap-x-8{column-gap:2rem}.gap-y-1{row-gap:0.25rem}.gap-y-2{row-gap:0.5rem}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.space-y-8 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2rem * var(--tw-space-y-reverse))}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-t{border-top-width:1px}.border-black{--tw-border-opacity:1;border-color:rgb(0 0 0 / var(--tw-border-opacity, 1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1))}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-black\/60{background-color:rgb(0 0 0 / 0.6)}.bg-neon{--tw-bg-opacity:1;background-color:rgb(204 255 0 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.pb-1{padding-bottom:0.25rem}.pb-1\.5{padding-bottom:0.375rem}.pb-2{padding-bottom:0.5rem}.pb-3{padding-bottom:0.75rem}.pt-1{padding-top:0.25rem}.pt-2{padding-top:0.5rem}.text-right{text-align:right}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-black{font-weight:900}.font-bold{font-weight:700}.uppercase{text-transform:uppercase}.italic{font-style:italic}.leading-relaxed{line-height:1.625}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-black{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.text-neon{--tw-text-opacity:1;color:rgb(204 255 0 / var(--tw-text-opacity, 1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.opacity-0{opacity:0}.outline-none{outline:2px solid transparent;outline-offset:2px}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-black:hover{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.hover\:bg-neon:hover{--tw-bg-opacity:1;background-color:rgb(204 255 0 / var(--tw-bg-opacity, 1))}.hover\:bg-neutral-100:hover{--tw-bg-opacity:1;background-color:rgb(245 245 245 / var(--tw-bg-opacity, 1))}.hover\:bg-neutral-200:hover{--tw-bg-opacity:1;background-color:rgb(229 229 229 / var(--tw-bg-opacity, 1))}.hover\:bg-white:hover{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.hover\:text-black:hover{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}.focus\:bg-neon\/20:focus{background-color:rgb(204 255 0 / 0.2)}.group\/trait:hover .group-hover\/trait\:opacity-100{opacity:1}@media (min-width: 640px){.sm\:flex-row{flex-direction:row}.sm\:items-baseline{align-items:baseline}.sm\:p-6{padding:1.5rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}@media (min-width: 1024px){.lg\:w-auto{width:auto}.lg\:flex-row{flex-direction:row}.lg\:items-center{align-items:center}}</style><style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.relative{position:relative}.inset-0{inset:0px}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.my-2{margin-top:0.5rem;margin-bottom:0.5rem}.my-4{margin-top:1rem;margin-bottom:1rem}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.ml-1{margin-left:0.25rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-2\.5{height:0.625rem}.min-h-screen{min-height:100vh}.w-2\.5{width:0.625rem}.w-full{width:100%}.max-w-5xl{max-width:64rem}.max-w-md{max-width:28rem}.shrink-0{flex-shrink:0}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-4{gap:1rem}.gap-x-4{column-gap:1rem}.gap-x-8{column-gap:2rem}.gap-y-1{row-gap:0.25rem}.gap-y-2{row-gap:0.5rem}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.space-y-8 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2rem * var(--tw-space-y-reverse))}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-t{border-top-width:1px}.border-black{--tw-border-opacity:1;border-color:rgb(0 0 0 / var(--tw-border-opacity, 1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1))}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-black\/60{background-color:rgb(0 0 0 / 0.6)}.bg-neon{--tw-bg-opacity:1;background-color:rgb(204 255 0 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.pb-1{padding-bottom:0.25rem}.pb-1\.5{padding-bottom:0.375rem}.pb-2{padding-bottom:0.5rem}.pb-3{padding-bottom:0.75rem}.pt-1{padding-top:0.25rem}.pt-2{padding-top:0.5rem}.text-right{text-align:right}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-black{font-weight:900}.font-bold{font-weight:700}.uppercase{text-transform:uppercase}.italic{font-style:italic}.leading-relaxed{line-height:1.625}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-black{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.text-neon{--tw-text-opacity:1;color:rgb(204 255 0 / var(--tw-text-opacity, 1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.opacity-0{opacity:0}.outline-none{outline:2px solid transparent;outline-offset:2px}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-black:hover{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.hover\:bg-neon:hover{--tw-bg-opacity:1;background-color:rgb(204 255 0 / var(--tw-bg-opacity, 1))}.hover\:bg-neutral-100:hover{--tw-bg-opacity:1;background-color:rgb(245 245 245 / var(--tw-bg-opacity, 1))}.hover\:bg-neutral-200:hover{--tw-bg-opacity:1;background-color:rgb(229 229 229 / var(--tw-bg-opacity, 1))}.hover\:bg-white:hover{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.hover\:text-black:hover{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}.focus\:bg-neon\/20:focus{background-color:rgb(204 255 0 / 0.2)}.group\/trait:hover .group-hover\/trait\:opacity-100{opacity:1}@media (min-width: 640px){.sm\:flex-row{flex-direction:row}.sm\:items-baseline{align-items:baseline}.sm\:p-6{padding:1.5rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}@media (min-width: 1024px){.lg\:w-auto{width:auto}.lg\:flex-row{flex-direction:row}.lg\:items-center{align-items:center}}</style><style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.relative{position:relative}.inset-0{inset:0px}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.my-2{margin-top:0.5rem;margin-bottom:0.5rem}.my-4{margin-top:1rem;margin-bottom:1rem}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.ml-1{margin-left:0.25rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-2\.5{height:0.625rem}.min-h-screen{min-height:100vh}.w-2\.5{width:0.625rem}.w-full{width:100%}.max-w-5xl{max-width:64rem}.max-w-md{max-width:28rem}.shrink-0{flex-shrink:0}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-4{gap:1rem}.gap-x-4{column-gap:1rem}.gap-x-8{column-gap:2rem}.gap-y-1{row-gap:0.25rem}.gap-y-2{row-gap:0.5rem}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.space-y-8 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2rem * var(--tw-space-y-reverse))}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-t{border-top-width:1px}.border-black{--tw-border-opacity:1;border-color:rgb(0 0 0 / var(--tw-border-opacity, 1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1))}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-black\/60{background-color:rgb(0 0 0 / 0.6)}.bg-neon{--tw-bg-opacity:1;background-color:rgb(204 255 0 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.pb-1{padding-bottom:0.25rem}.pb-1\.5{padding-bottom:0.375rem}.pb-2{padding-bottom:0.5rem}.pb-3{padding-bottom:0.75rem}.pt-1{padding-top:0.25rem}.pt-2{padding-top:0.5rem}.text-right{text-align:right}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-black{font-weight:900}.font-bold{font-weight:700}.uppercase{text-transform:uppercase}.italic{font-style:italic}.leading-relaxed{line-height:1.625}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-black{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.text-neon{--tw-text-opacity:1;color:rgb(204 255 0 / var(--tw-text-opacity, 1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.opacity-0{opacity:0}.outline-none{outline:2px solid transparent;outline-offset:2px}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-black:hover{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.hover\:bg-neon:hover{--tw-bg-opacity:1;background-color:rgb(204 255 0 / var(--tw-bg-opacity, 1))}.hover\:bg-neutral-100:hover{--tw-bg-opacity:1;background-color:rgb(245 245 245 / var(--tw-bg-opacity, 1))}.hover\:bg-neutral-200:hover{--tw-bg-opacity:1;background-color:rgb(229 229 229 / var(--tw-bg-opacity, 1))}.hover\:bg-white:hover{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.hover\:text-black:hover{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}.focus\:bg-neon\/20:focus{background-color:rgb(204 255 0 / 0.2)}.group\/trait:hover .group-hover\/trait\:opacity-100{opacity:1}@media (min-width: 640px){.sm\:flex-row{flex-direction:row}.sm\:items-baseline{align-items:baseline}.sm\:p-6{padding:1.5rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}@media (min-width: 1024px){.lg\:w-auto{width:auto}.lg\:flex-row{flex-direction:row}.lg\:items-center{align-items:center}}</style><style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.fixed{position:fixed}.relative{position:relative}.inset-0{inset:0px}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.my-2{margin-top:0.5rem;margin-bottom:0.5rem}.my-4{margin-top:1rem;margin-bottom:1rem}.mb-1{margin-bottom:0.25rem}.mb-2{margin-bottom:0.5rem}.ml-1{margin-left:0.25rem}.mt-0\.5{margin-top:0.125rem}.mt-1{margin-top:0.25rem}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-2\.5{height:0.625rem}.min-h-screen{min-height:100vh}.w-2\.5{width:0.625rem}.w-full{width:100%}.max-w-5xl{max-width:64rem}.max-w-md{max-width:28rem}.shrink-0{flex-shrink:0}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-4{gap:1rem}.gap-x-4{column-gap:1rem}.gap-x-8{column-gap:2rem}.gap-y-1{row-gap:0.25rem}.gap-y-2{row-gap:0.5rem}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.space-y-8 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2rem * var(--tw-space-y-reverse))}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-t{border-top-width:1px}.border-black{--tw-border-opacity:1;border-color:rgb(0 0 0 / var(--tw-border-opacity, 1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1))}.border-slate-800{--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-black\/60{background-color:rgb(0 0 0 / 0.6)}.bg-neon{--tw-bg-opacity:1;background-color:rgb(204 255 0 / var(--tw-bg-opacity, 1))}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.p-2{padding:0.5rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.pb-1{padding-bottom:0.25rem}.pb-1\.5{padding-bottom:0.375rem}.pb-2{padding-bottom:0.5rem}.pb-3{padding-bottom:0.75rem}.pt-1{padding-top:0.25rem}.pt-2{padding-top:0.5rem}.text-right{text-align:right}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-black{font-weight:900}.font-bold{font-weight:700}.uppercase{text-transform:uppercase}.italic{font-style:italic}.leading-relaxed{line-height:1.625}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-black{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.text-neon{--tw-text-opacity:1;color:rgb(204 255 0 / var(--tw-text-opacity, 1))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.opacity-0{opacity:0}.outline-none{outline:2px solid transparent;outline-offset:2px}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-black:hover{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.hover\:bg-neon:hover{--tw-bg-opacity:1;background-color:rgb(204 255 0 / var(--tw-bg-opacity, 1))}.hover\:bg-neutral-100:hover{--tw-bg-opacity:1;background-color:rgb(245 245 245 / var(--tw-bg-opacity, 1))}.hover\:bg-neutral-200:hover{--tw-bg-opacity:1;background-color:rgb(229 229 229 / var(--tw-bg-opacity, 1))}.hover\:bg-white:hover{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.hover\:text-black:hover{--tw-text-opacity:1;color:rgb(0 0 0 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}.focus\:bg-neon\/20:focus{background-color:rgb(204 255 0 / 0.2)}.group\/trait:hover .group-hover\/trait\:opacity-100{opacity:1}@media (min-width: 640px){.sm\:flex-row{flex-direction:row}.sm\:items-baseline{align-items:baseline}.sm\:p-6{padding:1.5rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}}@media (min-width: 768px){.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}@media (min-width: 1024px){.lg\:w-auto{width:auto}.lg\:flex-row{flex-direction:row}.lg\:items-center{align-items:center}}</style></head>
+<body class="bg-white text-black p-3 sm:p-6 min-h-screen">
+
+  <div class="max-w-5xl mx-auto space-y-6">
+
+    <!-- Top Action & Control Bar (Outside Embed Target) -->
+    <div class="p-4 border-cyber bg-black text-white space-y-3">
+      <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 bg-neon text-black font-black text-xs uppercase tracking-wider">Single Profile</span>
+            <h1 class="text-base sm:text-lg font-black text-neon">캐릭터 프로필 &amp; 상세 설정 에디터</h1>
+          </div>
+          <p class="text-xs text-slate-300 mt-1">
+            카테고리 제목을 포함한 모든 글자를 <b>직접 클릭하여 수정</b>하고, 각 항목을 추가·삭제·저장·불러오기 할 수 있습니다.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 w-full lg:w-auto">
+          <!-- Save JSON File Button -->
+          <button onclick="exportJSONData()" class="px-3 py-1.5 bg-white text-black font-bold border border-black hover:bg-neon transition-all text-xs">
+            💾 저장 (JSON)
+          </button>
+          
+          <!-- Load JSON File Button -->
+          <button onclick="document.getElementById('jsonFileInput').click()" class="px-3 py-1.5 bg-white text-black font-bold border border-black hover:bg-neon transition-all text-xs">
+            📂 불러오기
+          </button>
+          <input type="file" id="jsonFileInput" accept=".json" class="hidden" onchange="importJSONData(event)">
+
+          <!-- Reset to Sample Data Button -->
+          <button onclick="resetSampleData()" class="px-3 py-1.5 bg-white text-black font-bold border border-black hover:bg-neutral-200 transition-all text-xs">
+            초기화
+          </button>
+
+          <!-- Export HTML Code Button -->
+          <button onclick="copyHTMLSnippet()" class="px-4 py-1.5 bg-neon text-black font-bold border border-black hover:bg-white transition-all text-xs shrink-0">
+            <span id="copyBtnText">HTML 코드 복사</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="text-[11px] text-slate-400 border-t border-slate-800 pt-2 flex flex-wrap gap-x-4 gap-y-1">
+        <span>💡 <b>자동 저장:</b> 수정 사항은 브라우저(LocalStorage)에 자동 저장됩니다.</span>
+        <span>• JSON 파일로 컴퓨터에 저장하거나 불러올 수 있습니다.</span>
+      </div>
+    </div>
+
+    <!-- ==================== MAIN EMBEDDABLE SINGLE CHARACTER CANVAS START ==================== -->
+    <div id="single-character-profile-container" class="bg-white text-black space-y-8 my-4">
+
+      <!-- SECTION 1: Header Profile Card & Key Traits -->
+      <div class="border-cyber bg-white p-6 space-y-6">
+        
+        <!-- Header Name & Sub-name Row -->
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between border-b-2 border-black pb-3 gap-2">
+          <div>
+            <h2 id="charName" class="text-2xl sm:text-3xl font-black text-black tracking-tight" contenteditable="true" onblur="saveToLocalStorage()">릭</h2>
+            <span id="charSubName" class="text-xs font-mono font-bold text-slate-500 tracking-widest uppercase block mt-0.5" contenteditable="true" onblur="saveToLocalStorage()">Rick</span>
+          </div>
+        </div>
+
+        <!-- Main Representing Quote (Simple quotation marks " ") -->
+        <div class="py-2">
+          <p class="text-base sm:text-lg font-bold text-black italic leading-relaxed">
+            "<span id="charMainQuote" contenteditable="true" onblur="saveToLocalStorage()">계획에서 벗어난 변수는 당신 하나로 충분해요. 그 이상의 오차 범위는 허용하지 않습니다.</span>"
+          </p>
+        </div>
+
+        <!-- Key Traits & Stats Grid with Dotted Leaders -->
+        <div class="border-cyber bg-white p-4 space-y-3">
+          <div class="flex items-center justify-between border-b border-black pb-2">
+            <span id="catTitleTraits" class="text-xs font-black text-black uppercase tracking-wider" contenteditable="true" onblur="saveToLocalStorage()">BASIC INFORMATION &amp; TRAITS (기본 정보 및 속성)</span>
+            <button id="btnAddTrait" onclick="addCustomTrait()" class="text-[11px] font-bold bg-black text-neon px-2 py-0.5 hover:bg-neon hover:text-black transition-all">
+              + 속성 추가
+            </button>
+          </div>
+
+          <div id="traitsList" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
+          <div class="flex justify-between items-center text-xs group/trait">
+            <span class="font-bold text-slate-600 shrink-0" contenteditable="true" onblur="updateTraitKey(0, this.innerText)">AGE / GENDER</span>
+            <span class="dot-leader"></span>
+            <span class="font-bold text-black text-right shrink-0" contenteditable="true" onblur="updateTraitVal(0, this.innerText)">24세 / 여성</span>
+            <button onclick="removeTrait(0)" class="ml-1 text-red-600 font-bold text-[10px] opacity-0 group-hover/trait:opacity-100 transition-opacity shrink-0" title="삭제">✕</button>
+          </div>
+        
+          <div class="flex justify-between items-center text-xs group/trait">
+            <span class="font-bold text-slate-600 shrink-0" contenteditable="true" onblur="updateTraitKey(1, this.innerText)">ROLE</span>
+            <span class="dot-leader"></span>
+            <span class="font-bold text-black text-right shrink-0" contenteditable="true" onblur="updateTraitVal(1, this.innerText)">작전 지휘관 · 수석 전략가</span>
+            <button onclick="removeTrait(1)" class="ml-1 text-red-600 font-bold text-[10px] opacity-0 group-hover/trait:opacity-100 transition-opacity shrink-0" title="삭제">✕</button>
+          </div>
+        
+          <div class="flex justify-between items-center text-xs group/trait">
+            <span class="font-bold text-slate-600 shrink-0" contenteditable="true" onblur="updateTraitKey(2, this.innerText)">AFFILIATION</span>
+            <span class="dot-leader"></span>
+            <span class="font-bold text-black text-right shrink-0" contenteditable="true" onblur="updateTraitVal(2, this.innerText)">독립 해킹 연합 [ECHO]</span>
+            <button onclick="removeTrait(2)" class="ml-1 text-red-600 font-bold text-[10px] opacity-0 group-hover/trait:opacity-100 transition-opacity shrink-0" title="삭제">✕</button>
+          </div>
+        
+          <div class="flex justify-between items-center text-xs group/trait">
+            <span class="font-bold text-slate-600 shrink-0" contenteditable="true" onblur="updateTraitKey(3, this.innerText)">HEIGHT / WEIGHT</span>
+            <span class="dot-leader"></span>
+            <span class="font-bold text-black text-right shrink-0" contenteditable="true" onblur="updateTraitVal(3, this.innerText)">168cm / 52kg</span>
+            <button onclick="removeTrait(3)" class="ml-1 text-red-600 font-bold text-[10px] opacity-0 group-hover/trait:opacity-100 transition-opacity shrink-0" title="삭제">✕</button>
+          </div>
+        
+          <div class="flex justify-between items-center text-xs group/trait">
+            <span class="font-bold text-slate-600 shrink-0" contenteditable="true" onblur="updateTraitKey(4, this.innerText)">KEYWORD</span>
+            <span class="dot-leader"></span>
+            <span class="font-bold text-black text-right shrink-0" contenteditable="true" onblur="updateTraitVal(4, this.innerText)">통제 · 이성 · 결벽</span>
+            <button onclick="removeTrait(4)" class="ml-1 text-red-600 font-bold text-[10px] opacity-0 group-hover/trait:opacity-100 transition-opacity shrink-0" title="삭제">✕</button>
+          </div>
+        
+          <div class="flex justify-between items-center text-xs group/trait">
+            <span class="font-bold text-slate-600 shrink-0" contenteditable="true" onblur="updateTraitKey(5, this.innerText)">STATUS</span>
+            <span class="dot-leader"></span>
+            <span class="font-bold text-black text-right shrink-0" contenteditable="true" onblur="updateTraitVal(5, this.innerText)">수배 중 (Class A)</span>
+            <button onclick="removeTrait(5)" class="ml-1 text-red-600 font-bold text-[10px] opacity-0 group-hover/trait:opacity-100 transition-opacity shrink-0" title="삭제">✕</button>
+          </div>
+        </div>
+        </div>
+
+        <!-- Personality & Overview Narrative Block -->
+        <div class="space-y-2 pt-2">
+          <span id="catTitleOverview" class="text-xs font-black text-black uppercase tracking-wider block border-b border-black pb-1" contenteditable="true" onblur="saveToLocalStorage()">개요</span>
+          <p id="charOverview" class="text-xs leading-relaxed text-black pt-1" contenteditable="true" onblur="saveToLocalStorage()">중앙 제어 시스템 통제관 출신의 전략가. 철저한 규칙과 계산 속에서 삶을 영위해왔으나, 주요 시스템 무력화 사태 이후 비공식 작전 지휘관으로 전향했다. 차갑고 이성적인 언행 뒤에 강한 집착과 목적의식을 숨기고 있다.</p>
+        </div>
+
+      </div>
+
+
+      <!-- SECTION 2: Detailed Lore & Setting Sections (세계관 및 상세 설정) -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between border-b-2 border-black pb-2">
+          <h3 class="text-lg font-black text-black flex items-center gap-2">
+            <span class="w-2.5 h-2.5 bg-black"></span>
+            <span id="catTitleLore" contenteditable="true" onblur="saveToLocalStorage()">특징</span>
+          </h3>
+          <button id="btnAddLore" onclick="openAddLoreModal()" class="px-3 py-1 bg-black text-neon font-bold text-xs hover:bg-neon hover:text-black border border-black transition-all">
+            + 설정 항목 추가
+          </button>
+        </div>
+
+        <div id="loreCardsList" class="grid grid-cols-1 gap-4">
+          <div class="border-cyber bg-white p-4 space-y-2 relative group">
+            <div class="flex items-center justify-between border-b border-black pb-1.5">
+              <h4 class="text-sm font-bold text-black" contenteditable="true" onblur="updateLoreData('lore-1', 'title', this.innerText)">과거 및 신분 : 통제관 출신의 망명자</h4>
+              <button onclick="deleteLore('lore-1')" class="text-xs font-bold text-red-600 hover:underline shrink-0">삭제</button>
+            </div>
+            <p class="text-xs text-slate-800 leading-relaxed" contenteditable="true" onblur="updateLoreData('lore-1', 'desc', this.innerText)">
+              도시 중앙 프레임 규약 4조에 따라 보안 통제관으로 재직했으나, 내부 인프라의 은폐된 진실을 포착한 후 데이터를 탈취해 탈출하였다. 현재는 각 비공식 조직에 전략 및 분석을 제공하고 있다.
+            </p>
+          </div>
+        
+          <div class="border-cyber bg-white p-4 space-y-2 relative group">
+            <div class="flex items-center justify-between border-b border-black pb-1.5">
+              <h4 class="text-sm font-bold text-black" contenteditable="true" onblur="updateLoreData('lore-2', 'title', this.innerText)">능력 및 전술 가젯 : 휴대용 전술 단말 'NYX'</h4>
+              <button onclick="deleteLore('lore-2')" class="text-xs font-bold text-red-600 hover:underline shrink-0">삭제</button>
+            </div>
+            <p class="text-xs text-slate-800 leading-relaxed" contenteditable="true" onblur="updateLoreData('lore-2', 'desc', this.innerText)">
+              주위 50m 이내의 디지털 인프라를 실시간 교란 및 재해석하는 휴대용 신호 중계 단말기. 직접적 무력 다툼보다는 지형을 변형하거나 기계를 무력화하는 전술에 특화되어 있다.
+            </p>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- SECTION 3: Key Relationships (주요 관계성) -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between border-b-2 border-black pb-2">
+          <h3 class="text-lg font-black text-black flex items-center gap-2">
+            <span class="w-2.5 h-2.5 bg-neon border border-black"></span>
+            <span id="catTitleRel" contenteditable="true" onblur="saveToLocalStorage()">관계</span>
+          </h3>
+          <button id="btnAddRelation" onclick="openAddRelationModal()" class="px-3 py-1 bg-black text-neon font-bold text-xs hover:bg-neon hover:text-black border border-black transition-all">
+            + 관계성 추가
+          </button>
+        </div>
+
+        <div id="relationshipsList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="border-cyber bg-white p-4 flex flex-col justify-between space-y-3 relative">
+            <div>
+              <div class="flex items-baseline justify-between border-b border-black pb-1.5 mb-2">
+                <h4 class="text-base font-bold text-black" contenteditable="true" onblur="updateRelationData('rel-1', 'targetName', this.innerText)">강도현</h4>
+                <span class="text-[11px] font-bold bg-black text-neon px-2 py-0.5" contenteditable="true" onblur="updateRelationData('rel-1', 'relationType', this.innerText)">위험한 공생 및 자극 관계</span>
+              </div>
+              
+              <div class="text-xs italic font-bold text-slate-800 my-2">
+                "<span contenteditable="true" onblur="updateRelationData('rel-1', 'quote', this.innerText)">너처럼 똑똑한 애가 왜 날 못 버리는지 알아?</span>"
+              </div>
+
+              <p class="text-xs text-black leading-relaxed" contenteditable="true" onblur="updateRelationData('rel-1', 'desc', this.innerText)">
+                서아의 철저한 계획을 유일하게 무너뜨리는 직관적인 해결사. 위험천만한 그의 행동이 계산에 오차를 일으키지만, 가장 결정적인 순간 목숨을 의지하는 유일한 인물.
+              </p>
+            </div>
+
+            <div class="flex justify-end pt-2 border-t border-slate-200">
+              <button onclick="deleteRelation('rel-1')" class="text-xs font-bold text-red-600 hover:underline">관계 삭제</button>
+            </div>
+          </div>
+        
+          <div class="border-cyber bg-white p-4 flex flex-col justify-between space-y-3 relative">
+            <div>
+              <div class="flex items-baseline justify-between border-b border-black pb-1.5 mb-2">
+                <h4 class="text-base font-bold text-black" contenteditable="true" onblur="updateRelationData('rel-2', 'targetName', this.innerText)">한지유</h4>
+                <span class="text-[11px] font-bold bg-black text-neon px-2 py-0.5" contenteditable="true" onblur="updateRelationData('rel-2', 'relationType', this.innerText)">정신적 안식처 및 정보 중계자</span>
+              </div>
+              
+              <div class="text-xs italic font-bold text-slate-800 my-2">
+                "<span contenteditable="true" onblur="updateRelationData('rel-2', 'quote', this.innerText)">너무 기계처럼 살지 마, 서아야.</span>"
+              </div>
+
+              <p class="text-xs text-black leading-relaxed" contenteditable="true" onblur="updateRelationData('rel-2', 'desc', this.innerText)">
+                지독한 통제 욕구 속에서 유일하게 사적인 고민을 나눌 수 있는 인물. 서아의 과부하된 이성을 조율해주는 완충 지대 역할을 맡고 있다.
+              </p>
+            </div>
+
+            <div class="flex justify-end pt-2 border-t border-slate-200">
+              <button onclick="deleteRelation('rel-2')" class="text-xs font-bold text-red-600 hover:underline">관계 삭제</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <!-- ==================== MAIN EMBEDDABLE SINGLE CHARACTER CANVAS END ==================== -->
+
+  </div>
+
+
+  <!-- MODAL: Lore / Setting Section Add -->
+  <div id="loreModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white border-cyber max-w-md w-full p-6 space-y-4">
+      <div class="flex items-center justify-between border-b border-black pb-2">
+        <h3 class="text-sm font-bold text-black">설정 항목 추가</h3>
+        <button onclick="closeLoreModal()" class="text-black font-bold text-sm">✕</button>
+      </div>
+
+      <form onsubmit="saveNewLore(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold mb-1">설정 분류 / 제목</label>
+          <input type="text" id="loreTitleInput" required="" placeholder="예: [장비] 전술 제어 단말기" class="w-full p-2 border border-black outline-none focus:bg-neon/20">
+        </div>
+
+        <div>
+          <label class="block font-bold mb-1">상세 설정 내용</label>
+          <textarea id="loreDescInput" rows="4" required="" placeholder="해당 설정의 상세 내용을 입력하세요..." class="w-full p-2 border border-black outline-none focus:bg-neon/20"></textarea>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2 border-t border-black">
+          <button type="button" onclick="closeLoreModal()" class="px-3 py-1.5 border border-black bg-white font-bold hover:bg-neutral-100">취소</button>
+          <button type="submit" class="px-3 py-1.5 border border-black bg-neon text-black font-bold hover:bg-black hover:text-white">추가</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- MODAL: Relationship Add -->
+  <div id="relationModal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white border-cyber max-w-md w-full p-6 space-y-4">
+      <div class="flex items-center justify-between border-b border-black pb-2">
+        <h3 class="text-sm font-bold text-black">관계성 추가</h3>
+        <button onclick="closeRelationModal()" class="text-black font-bold text-sm">✕</button>
+      </div>
+
+      <form onsubmit="saveNewRelation(event)" class="space-y-3 text-xs">
+        <div>
+          <label class="block font-bold mb-1">상대 인물 이름</label>
+          <input type="text" id="relTargetInput" required="" placeholder="예: 강도현" class="w-full p-2 border border-black outline-none focus:bg-neon/20">
+        </div>
+
+        <div>
+          <label class="block font-bold mb-1">관계 정의 / 타이틀</label>
+          <input type="text" id="relTypeInput" required="" placeholder="예: 통제 및 자극의 공생 관계" class="w-full p-2 border border-black outline-none focus:bg-neon/20">
+        </div>
+
+        <div>
+          <label class="block font-bold mb-1">관계성 대표 대사</label>
+          <input type="text" id="relQuoteInput" placeholder="예: 나한테 피를 묻히라고 요구하는 건 너뿐이야." class="w-full p-2 border border-black outline-none focus:bg-neon/20">
+        </div>
+
+        <div>
+          <label class="block font-bold mb-1">상세 관계 서사</label>
+          <textarea id="relDescInput" rows="3" required="" placeholder="두 사람의 관계에 대한 서사를 입력하세요..." class="w-full p-2 border border-black outline-none focus:bg-neon/20"></textarea>
+        </div>
+
+        <div class="flex justify-end gap-2 pt-2 border-t border-black">
+          <button type="button" onclick="closeRelationModal()" class="px-3 py-1.5 border border-black bg-white font-bold hover:bg-neutral-100">취소</button>
+          <button type="submit" class="px-3 py-1.5 border border-black bg-neon text-black font-bold hover:bg-black hover:text-white">추가</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- SCRIPT LOGIC -->
+  <script>
+    const STORAGE_KEY = 'CHARACTER_PROFILE_EDITOR_DATA';
+
+    // State Store
+    let traitsData = [];
+    let loreData = [];
+    let relationData = [];
+
+    // Initialize Page
+    window.addEventListener('DOMContentLoaded', () => {
+      if (!loadFromLocalStorage()) {
+        resetSampleData();
+      }
+    });
+
+    // Reset to Default Sample Preset
+    function resetSampleData() {
+      document.getElementById('charName').innerText = "윤서아";
+      document.getElementById('charSubName').innerText = "YOON SEO-AH";
+      document.getElementById('charMainQuote').innerText = "계획에서 벗어난 변수는 당신 하나로 충분해요. 그 이상의 오차 범위는 허용하지 않습니다.";
+      document.getElementById('charOverview').innerText = "중앙 제어 시스템 통제관 출신의 전략가. 철저한 규칙과 계산 속에서 삶을 영위해왔으나, 주요 시스템 무력화 사태 이후 비공식 작전 지휘관으로 전향했다. 차갑고 이성적인 언행 뒤에 강한 집착과 목적의식을 숨기고 있다.";
+
+      document.getElementById('catTitleTraits').innerText = "BASIC INFORMATION & TRAITS (기본 정보 및 속성)";
+      document.getElementById('catTitleOverview').innerText = "OVERVIEW & PERSONALITY (성격 및 개요)";
+      document.getElementById('catTitleLore').innerText = "LORE & SETTINGS (세계관 및 상세 설정)";
+      document.getElementById('catTitleRel').innerText = "INTERPERSONAL RELATIONSHIPS (주요 관계성)";
+
+      traitsData = [
+        { key: "AGE / GENDER", value: "24세 / 여성" },
+        { key: "ROLE", value: "작전 지휘관 · 수석 전략가" },
+        { key: "AFFILIATION", value: "독립 해킹 연합 [ECHO]" },
+        { key: "HEIGHT / WEIGHT", value: "168cm / 52kg" },
+        { key: "KEYWORD", value: "통제 · 이성 · 결벽" },
+        { key: "STATUS", value: "수배 중 (Class A)" }
+      ];
+
+      loreData = [
+        {
+          id: "lore-1",
+          title: "과거 및 신분 : 통제관 출신의 망명자",
+          desc: "도시 중앙 프레임 규약 4조에 따라 보안 통제관으로 재직했으나, 내부 인프라의 은폐된 진실을 포착한 후 데이터를 탈취해 탈출하였다. 현재는 각 비공식 조직에 전략 및 분석을 제공하고 있다."
+        },
+        {
+          id: "lore-2",
+          title: "능력 및 전술 가젯 : 휴대용 전술 단말 'NYX'",
+          desc: "주위 50m 이내의 디지털 인프라를 실시간 교란 및 재해석하는 휴대용 신호 중계 단말기. 직접적 무력 다툼보다는 지형을 변형하거나 기계를 무력화하는 전술에 특화되어 있다."
+        }
+      ];
+
+      relationData = [
+        {
+          id: "rel-1",
+          targetName: "강도현",
+          relationType: "위험한 공생 및 자극 관계",
+          quote: "너처럼 똑똑한 애가 왜 날 못 버리는지 알아?",
+          desc: "서아의 철저한 계획을 유일하게 무너뜨리는 직관적인 해결사. 위험천만한 그의 행동이 계산에 오차를 일으키지만, 가장 결정적인 순간 목숨을 의지하는 유일한 인물."
+        },
+        {
+          id: "rel-2",
+          targetName: "한지유",
+          relationType: "정신적 안식처 및 정보 중계자",
+          quote: "너무 기계처럼 살지 마, 서아야.",
+          desc: "지독한 통제 욕구 속에서 유일하게 사적인 고민을 나눌 수 있는 인물. 서아의 과부하된 이성을 조율해주는 완충 지대 역할을 맡고 있다."
+        }
+      ];
+
+      renderAllSections();
+      saveToLocalStorage();
+    }
+
+    // Collect Current Profile Data Object
+    function getProfileDataPayload() {
+      return {
+        charName: document.getElementById('charName').innerText,
+        charSubName: document.getElementById('charSubName').innerText,
+        charMainQuote: document.getElementById('charMainQuote').innerText,
+        charOverview: document.getElementById('charOverview').innerText,
+        catTitleTraits: document.getElementById('catTitleTraits').innerText,
+        catTitleOverview: document.getElementById('catTitleOverview').innerText,
+        catTitleLore: document.getElementById('catTitleLore').innerText,
+        catTitleRel: document.getElementById('catTitleRel').innerText,
+        traitsData: traitsData,
+        loreData: loreData,
+        relationData: relationData
+      };
+    }
+
+    // Populate Page with Profile Data Payload
+    function applyProfileDataPayload(data) {
+      if (!data) return;
+      document.getElementById('charName').innerText = data.charName || "이름 없음";
+      document.getElementById('charSubName').innerText = data.charSubName || "";
+      document.getElementById('charMainQuote').innerText = data.charMainQuote || "";
+      document.getElementById('charOverview').innerText = data.charOverview || "";
+
+      document.getElementById('catTitleTraits').innerText = data.catTitleTraits || "BASIC INFORMATION & TRAITS";
+      document.getElementById('catTitleOverview').innerText = data.catTitleOverview || "OVERVIEW & PERSONALITY";
+      document.getElementById('catTitleLore').innerText = data.catTitleLore || "LORE & SETTINGS";
+      document.getElementById('catTitleRel').innerText = data.catTitleRel || "INTERPERSONAL RELATIONSHIPS";
+
+      traitsData = Array.isArray(data.traitsData) ? data.traitsData : [];
+      loreData = Array.isArray(data.loreData) ? data.loreData : [];
+      relationData = Array.isArray(data.relationData) ? data.relationData : [];
+
+      renderAllSections();
+    }
+
+    // LocalStorage Auto Save & Load
+    function saveToLocalStorage() {
+      const payload = getProfileDataPayload();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    }
+
+    function loadFromLocalStorage() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          applyProfileDataPayload(parsed);
+          return true;
+        } catch (e) {
+          console.error("Failed to parse localStorage data", e);
+        }
+      }
+      return false;
+    }
+
+    // JSON Export (File Download)
+    function exportJSONData() {
+      saveToLocalStorage();
+      const payload = getProfileDataPayload();
+      const jsonStr = JSON.stringify(payload, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      
+      const fileName = (payload.charName.trim() || 'character_profile') + '_data.json';
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // JSON Import (File Upload)
+    function importJSONData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          applyProfileDataPayload(parsed);
+          saveToLocalStorage();
+          alert('프로필 데이터를 성공적으로 불러왔습니다!');
+        } catch (err) {
+          alert('유효하지 않은 JSON 파일 형식입니다.');
+        }
+        event.target.value = '';
+      };
+      reader.readAsText(file);
+    }
+
+    // Render All Dynamic Sections
+    function renderAllSections() {
+      renderTraits();
+      renderLoreCards();
+      renderRelationships();
+    }
+
+    // 1. Key Traits Render
+    function renderTraits() {
+      const container = document.getElementById('traitsList');
+      if (traitsData.length === 0) {
+        container.innerHTML = `<div class="col-span-2 text-center text-neutral-400 text-xs py-2">등록된 속성이 없습니다.</div>`;
+        return;
+      }
+
+      let html = '';
+      traitsData.forEach((item, index) => {
+        html += `
+          <div class="flex justify-between items-center text-xs group/trait">
+            <span class="font-bold text-slate-600 shrink-0" contenteditable="true" onblur="updateTraitKey(${index}, this.innerText)">${item.key}</span>
+            <span class="dot-leader"></span>
+            <span class="font-bold text-black text-right shrink-0" contenteditable="true" onblur="updateTraitVal(${index}, this.innerText)">${item.value}</span>
+            <button onclick="removeTrait(${index})" class="ml-1 text-red-600 font-bold text-[10px] opacity-0 group-hover/trait:opacity-100 transition-opacity shrink-0" title="삭제">✕</button>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function updateTraitKey(index, val) {
+      if (traitsData[index]) {
+        traitsData[index].key = val.trim();
+        saveToLocalStorage();
+      }
+    }
+
+    function updateTraitVal(index, val) {
+      if (traitsData[index]) {
+        traitsData[index].value = val.trim();
+        saveToLocalStorage();
+      }
+    }
+
+    function addCustomTrait() {
+      traitsData.push({ key: "NEW TRAIT", value: "속성 값" });
+      renderTraits();
+      saveToLocalStorage();
+    }
+
+    function removeTrait(index) {
+      traitsData.splice(index, 1);
+      renderTraits();
+      saveToLocalStorage();
+    }
+
+
+    // 2. Lore Cards Render
+    function renderLoreCards() {
+      const container = document.getElementById('loreCardsList');
+      if (loreData.length === 0) {
+        container.innerHTML = `<div class="text-center text-neutral-400 text-xs py-6 border border-dashed border-black">등록된 세계관/상세 설정이 없습니다.</div>`;
+        return;
+      }
+
+      let html = '';
+      loreData.forEach((item) => {
+        html += `
+          <div class="border-cyber bg-white p-4 space-y-2 relative group">
+            <div class="flex items-center justify-between border-b border-black pb-1.5">
+              <h4 class="text-sm font-bold text-black" contenteditable="true" onblur="updateLoreData('${item.id}', 'title', this.innerText)">${item.title}</h4>
+              <button onclick="deleteLore('${item.id}')" class="text-xs font-bold text-red-600 hover:underline shrink-0">삭제</button>
+            </div>
+            <p class="text-xs text-slate-800 leading-relaxed" contenteditable="true" onblur="updateLoreData('${item.id}', 'desc', this.innerText)">
+              ${item.desc}
+            </p>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function updateLoreData(id, field, value) {
+      const item = loreData.find(l => l.id === id);
+      if (item) {
+        item[field] = value.trim();
+        saveToLocalStorage();
+      }
+    }
+
+    function openAddLoreModal() {
+      document.getElementById('loreTitleInput').value = '';
+      document.getElementById('loreDescInput').value = '';
+      document.getElementById('loreModal').classList.remove('hidden');
+    }
+
+    function closeLoreModal() {
+      document.getElementById('loreModal').classList.add('hidden');
+    }
+
+    function saveNewLore(e) {
+      e.preventDefault();
+      const title = document.getElementById('loreTitleInput').value;
+      const desc = document.getElementById('loreDescInput').value;
+
+      loreData.push({
+        id: 'lore-' + Date.now(),
+        title,
+        desc
+      });
+
+      closeLoreModal();
+      renderLoreCards();
+      saveToLocalStorage();
+    }
+
+    function deleteLore(id) {
+      loreData = loreData.filter(l => l.id !== id);
+      renderLoreCards();
+      saveToLocalStorage();
+    }
+
+
+    // 3. Relationships Render
+    function renderRelationships() {
+      const container = document.getElementById('relationshipsList');
+      if (relationData.length === 0) {
+        container.innerHTML = `<div class="col-span-2 text-center text-neutral-400 text-xs py-6 border border-dashed border-black">등록된 주요 관계성이 없습니다.</div>`;
+        return;
+      }
+
+      let html = '';
+      relationData.forEach((item) => {
+        html += `
+          <div class="border-cyber bg-white p-4 flex flex-col justify-between space-y-3 relative">
+            <div>
+              <div class="flex items-baseline justify-between border-b border-black pb-1.5 mb-2">
+                <h4 class="text-base font-bold text-black" contenteditable="true" onblur="updateRelationData('${item.id}', 'targetName', this.innerText)">${item.targetName}</h4>
+                <span class="text-[11px] font-bold bg-black text-neon px-2 py-0.5" contenteditable="true" onblur="updateRelationData('${item.id}', 'relationType', this.innerText)">${item.relationType}</span>
+              </div>
+              
+              <div class="text-xs italic font-bold text-slate-800 my-2">
+                "<span contenteditable="true" onblur="updateRelationData('${item.id}', 'quote', this.innerText)">${item.quote}</span>"
+              </div>
+
+              <p class="text-xs text-black leading-relaxed" contenteditable="true" onblur="updateRelationData('${item.id}', 'desc', this.innerText)">
+                ${item.desc}
+              </p>
+            </div>
+
+            <div class="flex justify-end pt-2 border-t border-slate-200">
+              <button onclick="deleteRelation('${item.id}')" class="text-xs font-bold text-red-600 hover:underline">관계 삭제</button>
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = html;
+    }
+
+    function updateRelationData(id, field, value) {
+      const item = relationData.find(r => r.id === id);
+      if (item) {
+        item[field] = value.trim();
+        saveToLocalStorage();
+      }
+    }
+
+    function openAddRelationModal() {
+      document.getElementById('relTargetInput').value = '';
+      document.getElementById('relTypeInput').value = '';
+      document.getElementById('relQuoteInput').value = '';
+      document.getElementById('relDescInput').value = '';
+      document.getElementById('relationModal').classList.remove('hidden');
+    }
+
+    function closeRelationModal() {
+      document.getElementById('relationModal').classList.add('hidden');
+    }
+
+    function saveNewRelation(e) {
+      e.preventDefault();
+      const targetName = document.getElementById('relTargetInput').value;
+      const relationType = document.getElementById('relTypeInput').value;
+      const quote = document.getElementById('relQuoteInput').value || "대사 없음";
+      const desc = document.getElementById('relDescInput').value;
+
+      relationData.push({
+        id: 'rel-' + Date.now(),
+        targetName,
+        relationType,
+        quote,
+        desc
+      });
+
+      closeRelationModal();
+      renderRelationships();
+      saveToLocalStorage();
+    }
+
+    function deleteRelation(id) {
+      relationData = relationData.filter(r => r.id !== id);
+      renderRelationships();
+      saveToLocalStorage();
+    }
+
+
+    // 4. Clean HTML Snippet Export Handler
+    function copyHTMLSnippet() {
+      const containerClone = document.getElementById('single-character-profile-container').cloneNode(true);
+
+      // Remove contenteditable attributes and editing buttons from exported HTML
+      containerClone.querySelectorAll('[contenteditable="true"]').forEach(el => el.removeAttribute('contenteditable'));
+      containerClone.querySelectorAll('button').forEach(btn => btn.remove());
+
+      const snippetCode = `<!-- 캐릭터 프로필 & 설정 틀 시작 -->
+<script src="https://cdn.tailwindcss.com"><\/script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: { neon: '#ccff00' }
+      }
+    }
+  }
+<\/script>
+<style>
+  .border-cyber { border: 1px solid #111111; box-shadow: none !important; }
+  .dot-leader { border-bottom: 2px dotted #cccccc; flex-grow: 1; margin: 0 8px 4px 8px; }
+  #single-character-profile-container, #single-character-profile-container * {
+    font-family: inherit !important;
+    box-shadow: none !important;
+  }
+</style>
+
+<div id="single-character-profile-container" class="max-w-5xl mx-auto my-6 bg-white text-black space-y-8">
+  ${containerClone.innerHTML}
+</div>
+<!-- 캐릭터 프로필 & 설정 틀 끝 -->`;
+
+      const tempTextArea = document.createElement('textarea');
+      tempTextArea.value = snippetCode;
+      document.body.appendChild(tempTextArea);
+      tempTextArea.select();
+
+      try {
+        document.execCommand('copy');
+        const btnText = document.getElementById('copyBtnText');
+        btnText.innerText = '복사 완료!';
+        setTimeout(() => {
+          btnText.innerText = 'HTML 코드 복사';
+        }, 2000);
+      } catch (err) {
+        console.error('Copy failed', err);
+      }
+
+      document.body.removeChild(tempTextArea);
+    }
+  </script>
+
+</body></html>
